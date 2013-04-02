@@ -3,12 +3,16 @@
 #include <cstdlib>
 #include <cstring>
 
-int size = 3;
-int num = 9;
 
 
 int main(int argc, const char *argv[])
 {
+    int size = 3;
+    int num = 9;
+    if (argc > 2) {
+        sscanf(argv[1], "%d", &size);
+        sscanf(argv[2], "%d", &num);
+    }
     int board_size = size*size*size*size;
     int *board = new int[board_size];
     memset(board, 0, board_size * sizeof(int));
