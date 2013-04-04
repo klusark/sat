@@ -214,17 +214,18 @@ bool solve(Puzzle &puzzle, unsigned iMin, unsigned iMax,
 void readPuzzle(Puzzle &p) {
 	for (unsigned i = 0; i < gridSize; i++) {
 		for (unsigned j = 0; j < gridSize; j++) {
-			char c;
+			std::string c;
 			cin >> c;
-			if (c >= '1' && c <= '9') {
-				c = c - '0';
+            uint32_t val = 0;
+            sscanf(c.c_str(), "%d", &val);
+			if (val >= 1 && val <= gridSize) {
 				// Refuse to input an invalid puzzle
 
-				if ((p.candidates(i, j) & bitFor(c)) == 0)
+				if ((p.candidates(i, j) & bitFor(val)) == 0)
 					exit(1);
 				else
-					p.set(i, j, c);
-			} else if (c == '.') {
+					p.set(i, j, val);
+			} else if (c == ".") {
 			} else exit(1);
 		}
 
@@ -236,10 +237,12 @@ void readPuzzle(Puzzle &p) {
 void printPuzzle(Puzzle &p) {
 	for (unsigned i = 0; i < gridSize; i++) {
 		for (unsigned j = 0; j < gridSize; j++) {
-			if (p.getCell(i, j) == p.invalid)
+			if (p.getCell(i, j) == p.invalid) {
 				cout << " ";
-			else
-				cout << p.getCell(i, j);
+			} else {
+                printf("%02d ", p.getCell(i, j));
+//				cout << p.getCell(i, j) << " ";
+            }
 		}
 
 		cout << endl;
