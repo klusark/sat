@@ -1,0 +1,44 @@
+
+
+Sudoku Generator. 
+(c) IISI, cs.Cornell.EDU 
+(c) CCIA  ai.udl.cat, 2008-2010
+
+
+
+This program generates sudokus as described in 
+
+-  The Impact of Balancing on Problem Hardness in a Highly Structured Domain
+   Carlos Ansotegui, Ramon Bejar, Cesar Fernandez, Carla Gomes, Carles Mateu
+   Proceedings of the AAAI 2006
+
+-  <to appear>
+   Generating Highly Balanced Sudoku Problems as Hard Problems
+   Carlos Ansotegui, Ramon Bejar, Cesar Fernandez, Carla Gomes, Carles Mateu
+   Submitted paper to Journal of Heuristics
+   
+
+using one of the 3 methods there explained. There are 3 helper scripts in scripts/ showing usage of this program.
+
+generatesudoku.sh  - Generates a Sudoku in a PLS (GS) and pokes holes using any of the 3 methods.
+generatecnf.sh  - Generates a CNF from a PLS file
+generatepls.sh  - Generates a sudoku in a PLS file (not poked)
+
+Usage of generatesudoku is as follows:
+
+generatesudoku.sh <rows> <columns> <shuffles> <method> <holes> <seed> <shuffles2>
+
+<rows>       - rows of sudoku region
+<columns>    - columns of sudoku region
+<shuffles>   - shuffles in PLS generating Markov-Chain
+<method>     - singly | doubly | fully
+<holes>      - # holes in sudoku
+<seed>       - random seed
+<shuffles2>  - shuffles in Hole Poking Markov Chain
+
+for example:
+
+generatesudoku.sh 3 3 10 fully 40 123 12 
+
+Generates a 3x3 sudoku (9 x 9 cells) with 40 holes fully balanced. 
+
