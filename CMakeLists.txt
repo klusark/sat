@@ -9,3 +9,5 @@ add_executable(sudoku2sat sudoku2sat.cc)
 add_executable(direct solver.cc)
 
 add_executable(sgen sgen.cc)
+
+add_executable(fixformat fixformat.cc)
