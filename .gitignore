@@ -1,4 +1,8 @@
 *.swp
+*.aux
+*.log
+*.pdf
+*.gz
 CMakeCache.txt
 CMakeFiles
 ./Makefile
