@@ -58,7 +58,7 @@ int main()
     printf("TYPE INT [ 1.. %d]\n", s);
     printf("PREDICATE Filled\n");
     for (const Pos &p : pos) {
-        printf("(%d, %d, %d)\n", p.x, p.y, p.v);
+        printf("(%d, %d, %d)\n", p.x + 1, p.y + 1, p.v);
     }
     printf("FUNCTION N\n");
     printf("( : %d )\n", n);

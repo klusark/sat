@@ -1,10 +1,14 @@
 #include <iostream>
+#include <cstdio>
 
 using namespace std;
 
-int main()
+int main(int argc, const char **argv)
 {
     int columns = 7;
+    if (argc == 2) {
+        sscanf(argv[1], "%d", &columns);
+    }
 
     int column = 0;
 
