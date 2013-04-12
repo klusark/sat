@@ -11,29 +11,6 @@ int bits = 4;
 std::vector<int *> lines;
 std::vector<int> done;
 
-void makeline(bool row)
-{
-	int x = 0;
-	int y = 0;
-
-	int *ay = &x;
-	int *ax = &y;
-	if (row) {
-		ay = &y;
-		ax = &x;
-	}
-	for (*ay = 0; *ay < s; *ay += 1) {
-		for (int k = 0; k < s; ++k) {
-			int *l = new int[s];
-			int i = 0;
-			for (*ax = 0; *ax < s; *ax += 1) {
-				l[i++] = (y * s * s + x * s + k) + 1;
-			}
-			lines.push_back(l);
-		}
-	}
-}
-
 void permute(std::vector<int> p, int l)
 {
     if (l == bits) {
@@ -50,6 +27,36 @@ void permute(std::vector<int> p, int l)
     permute(p, l + 1);
 }
 
+
+void makeline(bool row)
+{
+	int x = 0;
+	int y = 0;
+
+	int *ay = &x;
+	int *ax = &y;
+	if (row) {
+		ay = &y;
+		ax = &x;
+	}
+
+    for (*ay = 0; *ay < s; *ay += 1) {
+        for (*ax = 0; *ax < s; *ax += 1) {
+            for (int i = *ax + 1; i < s; ++i) {
+                std::vector<int> p;
+                for (int j = 0; j < bits; ++j) {
+                    p.push_back((y*s*bits)+(x*bits)+j + 1);
+                    if (row) {
+                        p.push_back((y*s*bits)+((i*bits)+j) + 1);
+                    } else {
+                        p.push_back((i*s*bits)+((x*bits)+j) + 1);
+                    }
+                }
+                permute(p, 0);
+            }
+        }
+    }
+}
 int main()
 {
     {
@@ -89,19 +96,23 @@ int main()
 
     printf("p cnf 36 40\n");
 
-
-    for (int y = 0; y < s; ++y) {
-        for (int x = 0; x < s; ++x) {
-            for (int i = x + 1; i < s; ++i) {
+    /*for (int x = 0; x < s; ++x) {
+        for (int y = 0; y < s; ++y) {
+            for (int i = y + 1; i < s; ++i) {
                 std::vector<int> p;
                 for (int j = 0; j < bits; ++j) {
-                    p.push_back((y*s*bits)+(x*4)+j + 1);
-                    p.push_back((y*s*bits)+((i*4)+j) + 1);
+                    p.push_back((y*s*bits)+(x*bits)+j + 1);
+                    p.push_back((i*s*bits)+((x*bits)+j) + 1);
                 }
                 permute(p, 0);
             }
         }
-    }
+    }*/
+
+    makeline(true);
+
+    makeline(false);
+
 
 	for (int i = 0; i < done.size(); ++i) {
         if (done[i] == -1) {

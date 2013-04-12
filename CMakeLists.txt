@@ -1,6 +1,6 @@
 project(gif)
 
-SET(CMAKE_CXX_FLAGS "-std=c++11 -g -O2 -Wall")
+SET(CMAKE_CXX_FLAGS "-std=c++11 -g -O0 -Wall")
 
 add_executable(random random.cc)
 
