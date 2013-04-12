@@ -6,6 +6,7 @@
 
 int n = 0;
 int s = 0;
+int bits = 4;
 
 std::vector<int *> lines;
 std::vector<int> done;
@@ -33,6 +34,22 @@ void makeline(bool row)
 	}
 }
 
+void permute(std::vector<int> p, int l)
+{
+    if (l == bits) {
+        for (int i = 0; i < bits; ++i) {
+            printf("%d %d ", p[i*2], p[i*2+1]);
+        }
+        printf("0\n");
+        return;
+    }
+
+    permute(p, l + 1);
+    p[l*2] *= -1;
+    p[l*2 + 1] *= -1;
+    permute(p, l + 1);
+}
+
 int main()
 {
     {
@@ -58,9 +75,10 @@ int main()
         int y = 0;
         for (int i = 0; i < size; ++i) {
             int val = nums[i];
-            if (val != -1) {
+            /*if (val != -1) {
                 done.push_back(y*s*s + x * s + (val));
-            }
+            }*/
+            done.push_back(val);
             ++x;
             if ((i + 1) % s == 0) {
                 ++y;
@@ -68,6 +86,36 @@ int main()
             }
         }
     }
+
+    printf("p cnf 36 40\n");
+
+
+    for (int y = 0; y < s; ++y) {
+        for (int x = 0; x < s; ++x) {
+            for (int i = x + 1; i < s; ++i) {
+                std::vector<int> p;
+                for (int j = 0; j < bits; ++j) {
+                    p.push_back((y*s*bits)+(x*4)+j + 1);
+                    p.push_back((y*s*bits)+((i*4)+j) + 1);
+                }
+                permute(p, 0);
+            }
+        }
+    }
+
+	for (int i = 0; i < done.size(); ++i) {
+        if (done[i] == -1) {
+            continue;
+        }
+        for (int j = 0; j < bits; ++j) {
+            if ((1 << j) & done[i]) {
+		        printf("%d 0\n", (i*4+j) + 1);
+            } else {
+		        printf("-%d 0\n", (i*4+j) + 1);
+            }
+        }
+	}
+    return 0;
 
 	//rows
 	makeline(true);
