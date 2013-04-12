@@ -11,4 +11,5 @@ add_executable(direct solver.cc)
 
 add_executable(sgen sgen.cc)
 
+add_executable(tocsv tocsv.cc)
 add_executable(fixformat fixformat.cc)
