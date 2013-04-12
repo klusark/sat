@@ -96,23 +96,24 @@ int main()
 
     printf("p cnf 36 40\n");
 
-    /*for (int x = 0; x < s; ++x) {
-        for (int y = 0; y < s; ++y) {
-            for (int i = y + 1; i < s; ++i) {
-                std::vector<int> p;
-                for (int j = 0; j < bits; ++j) {
-                    p.push_back((y*s*bits)+(x*bits)+j + 1);
-                    p.push_back((i*s*bits)+((x*bits)+j) + 1);
-                }
-                permute(p, 0);
-            }
-        }
-    }*/
-
     makeline(true);
 
     makeline(false);
 
+	for (int y = 0; y < n; ++y) {
+		for (int x = 0; x < n; ++x) {
+			for (int k = 0; k < s; ++k) {
+                std::vector<int> p;
+				for (int j = 0; j < n; ++j) {
+					for (int i = 0; i < n; ++i) {
+                        p.push_back((y*s*bits)+(x*bits)+j + 1);
+                        p.push_back((y*s*bits)+((i*bits)+j) + 1);
+                    }
+				}
+                permute(p, 0);
+			}
+		}
+	}
 
 	for (int i = 0; i < done.size(); ++i) {
         if (done[i] == -1) {
