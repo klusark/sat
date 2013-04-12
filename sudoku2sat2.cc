@@ -115,7 +115,9 @@ int main()
         }
     }
 
-    printf("p cnf 36 40\n");
+    int numvar = bits * s * s;
+
+    printf("p cnf %d 40\n", numvar);
 
     makeline(true);
 
