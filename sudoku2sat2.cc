@@ -80,6 +80,7 @@ void dosquare(int x, int y)
 
 int main()
 {
+    int numnondot = 0;
     {
         std::vector<char> nums;
         int num = -1;
@@ -103,9 +104,9 @@ int main()
         int y = 0;
         for (int i = 0; i < size; ++i) {
             int val = nums[i];
-            /*if (val != -1) {
-                done.push_back(y*s*s + x * s + (val));
-            }*/
+            if (val != -1) {
+                numnondot += 1;
+            }
             done.push_back(val);
             ++x;
             if ((i + 1) % s == 0) {
@@ -116,8 +117,9 @@ int main()
     }
 
     int numvar = bits * s * s;
+    int numc = numnondot*4 + 92160;
 
-    printf("p cnf %d 40\n", numvar);
+    printf("p cnf %d %d\n", numvar, numc);
 
     makeline(true);
 

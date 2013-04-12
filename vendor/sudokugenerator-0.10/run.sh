@@ -10,5 +10,9 @@ echo "cnf1 + glucose"
 time ../../vendor/glucose2.2/core/glucose < cnf1 > /dev/null
 echo "cnf2 + glucose"
 time ../../vendor/glucose2.2/core/glucose < cnf2 > /dev/null
+echo "cnf1 + lingeling"
+time ../../vendor/lingeling-ala-b02aa1a-121013/lingeling < cnf1 > /dev/null
+echo "cnf2 + lingeling"
+time ../../vendor/lingeling-ala-b02aa1a-121013/lingeling < cnf2 > /dev/null
 echo "direct"
 time ../../direct < puzzle > /dev/null
