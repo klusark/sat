@@ -57,6 +57,27 @@ void makeline(bool row)
         }
     }
 }
+
+void dosquare(int x, int y)
+{
+    x *= n;
+    y *= n;
+    for (int k = 0; k < s; ++k) {
+        for (int i = k + 1; i < s; ++i) {
+            std::vector<int> p;
+            for (int j = 0; j < bits; ++j) {
+                int x2 = k%n;
+                int y2 = k/n;
+                int x3 = i%n;
+                int y3 = i/n;
+                p.push_back(((y + y2)*s*bits)+((x+x2)*bits)+j + 1);
+                p.push_back(((y+y3)*s*bits)+(((x+x3)*bits)+j) + 1);
+            }
+            permute(p, 0);
+        }
+    }
+}
+
 int main()
 {
     {
@@ -102,16 +123,8 @@ int main()
 
 	for (int y = 0; y < n; ++y) {
 		for (int x = 0; x < n; ++x) {
-			for (int k = 0; k < s; ++k) {
-                std::vector<int> p;
-				for (int j = 0; j < n; ++j) {
-					for (int i = 0; i < n; ++i) {
-                        p.push_back((y*s*bits)+(x*bits)+j + 1);
-                        p.push_back((y*s*bits)+((i*bits)+j) + 1);
-                    }
-				}
-                permute(p, 0);
-			}
+            dosquare(x, y);
+
 		}
 	}
 
@@ -127,61 +140,5 @@ int main()
             }
         }
 	}
-    return 0;
 
-	//rows
-	makeline(true);
-
-	//columns
-	makeline(false);
-
-	//squares
-	for (int y = 0; y < n; ++y) {
-		for (int x = 0; x < n; ++x) {
-			for (int k = 0; k < s; ++k) {
-				int *l = new int[s];
-				int m = 0;
-				for (int j = 0; j < n; ++j) {
-					for (int i = 0; i < n; ++i) {
-						l[m++] = ((y * n + j) * s * s + (x * n + i) * s + k) + 1;
-					}
-				}
-				lines.push_back(l);
-			}
-		}
-	}
-
-	for (int y = 0; y < s; ++y) {
-		for (int x = 0; x < s; ++x) {
-			int *l = new int[s];
-			int i = 0;
-			for (int k = 0; k < s; ++k) {
-				l[i++] = (y * s * s + x * s + k) + 1;
-			}
-			lines.push_back(l);
-		}
-	}
-
-    int mul = 0;
-    for (int i = 0; i < s; ++i) {
-        mul += i;
-    }
-	int size = lines.size();
-	printf("p cnf %d %d\n", s * s * s, size + size * mul + done.size());
-	for (int i = 0; i < size; ++i) {
-		for (int x = 0; x < s; ++x) {
-			printf("%d ", lines[i][x]);
-		}
-		printf("0\n");
-		for (int x = 0; x < s; ++x) {
-			for (int y = x + 1; y < s; ++y) {
-				printf("-%d -%d 0\n", lines[i][x], lines[i][y]);
-			}
-		}
-		delete[] lines[i];
-	}
-	size = done.size();
-	for (int i = 0; i < size; ++i) {
-		printf("%d 0\n", done[i]);
-	}
 }
