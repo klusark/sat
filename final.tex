@@ -15,7 +15,7 @@
 %%% PAGE DIMENSIONS
 \usepackage{geometry} % to change the page dimensions
 \geometry{letterpaper} % or letterpaper (US) or a5paper or....
-\geometry{margin=1in} % for example, change the margins to 2 inches all round
+\geometry{margin=0.5in} % for example, change the margins to 2 inches all round
 % \geometry{landscape} % set up the page for landscape
 %   read geometry.pdf for detailed page layout information
 
@@ -30,6 +30,7 @@
 \usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
 \usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
 % These packages are all incorporated in the memoir class to one degree or another...
+\usepackage{pgfplots}
 
 %%% HEADERS & FOOTERS
 \usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
@@ -62,21 +63,79 @@
 \maketitle
 
 \section{Problem}
-Investigating how different forms of CNF for generalized sudoku affect the speed in which different SAT solvers can show satisfiability or unsatisfiability.
+Investigating how different forms of CNF for generalized sudoku affect the speed in which different SAT solvers can show satisfiability.
 
 \section{Emphasis}
 My emphasis for this project is on using SAT solvers.
 
 \section{Direct Solution}
-I found a solver online that was put into the public domain which almost supported generalized sudoku. I have done a few minor changes in order for it to read the same format that my other tools use, for example, being able to read a number larger than one digit. One trouble I have been having though is that this solver is not very fast in a lot of situations, but I have not been able to find any other solvers online for generalized sudoku.
+I found a solver online\footnote{http://www.8325.org/sudoku/source.html} that was put into the public domain which almost supported generalized sudoku. I have done a few minor changes in order for it to read the same format that my other tools use, for example, being able to read a number larger than one digit. This solver is not the greatest direct solver that is available, but should represent a good baseline for how fast a direct solver will be.
 
 \section{Specification-based Solution}
-I am just using the specification provided on the course website, running it through the provided copy of Enfragmo. The input format is different than my tools, so instead of trying to make it somehow read the input format I want, I wrote a little program to take the input format I want and output the format the the specification expects.
+The specification being used is the one that has been provided on the course website. It is being run through the provided copy of Enfragmo. I have not included the copy of Enfragmo in the zip file as I do not want to distribute it anywhere. All my scripts assume that the provided binary is located in the users home directory. The input format is different than my tools, so instead of trying to make it somehow read the input format I want, I wrote a small program to take the input format I want and output the format the the specification expects.
 
 \section{Benchmark Instance Families}
-I've been working on a random generalized sudoku generator to use for one family of benchmarks. I have tried to find a generalized sudoku generator online to save me effort in making this part, but none of the generators are easily converted to the generalized case.
+One family I use is randomly generated problems. There is a good generalized sudoku generator that I found online\footnote{http://ia.udl.cat/remository/Software/Sudoku-Generator/}. This generator has full control over how many empty spots there are on the sudoku board and I have found that it actually does generate interesting problems for the solvers to run. I wrote a set of scripts to run
 
-\section{Emphasis Direction}
-Using a number of different SAT solvers, including but not limited to MiniSat, Glucose, and SatELite on multiple different ways to represent a generalized sudoku in CNF. Right now the biggest obstacle I have is actually writing the code for more ways of representing the problem in CNF, but this should not be too hard in the end.
+\section{Emphasis On SAT}
+\subsection{Methods}
+Two methods of generating CNF formulas were generated for this problem. The first method is very simple. It uses 1 variable for each possible number on each square of the map. For a 16x16 sudoku this means it has a total of 4096 variables. The clauses for this one are for the most part very simple, consisting of only two variables each for most of the clauses. The second method is a lot more complicated. The idea for it came from the paper\footnote{http://www.cs.sfu.ca/~mitchell/cmpt-417/2013-Spring/Readings/2-Malik-Zhang-CACM-SAT-Review.pdf} we were provided on solving graph colouring using binary. I use only four variables for each square on the board which represent the number in binary. For example if we have variables $a = 1, b = 0, c = 1, d = 0$ the value of the square would be $5$. This method works very well for 16x16 as no bits are wasted, unlike for a 9x9 puzzle as you would still need 4 bits to represent it. This has a huge advantage in the number of variables used for the problem as each square only needs 4, unlike my first method where they need 16, meaning the total number of variables for a 16x16 is only 1024. But, this comes at a cost in the formula that is generated as the clauses now all use at least eight variables, making it a lot harder to eliminate clauses from the formula.
+\subsection{Solvers}
+There are many SAT solvers out that that have been released as open source. Oddly enough, a large number of them seem to be based on MiniSat. I chose four SAT solvers that have done generally very well in past SAT competitions, which were also easy to build on my machine.
+
+\section{Results}
+\subsection{First Family}
+The first benchmark family has a simple architecture, but provides very interesting data through running the solvers many times. Simply it generates a 16x16 sudoku puzzle randomly with N holes. N starts at 1 and increases by 5 up to 251. Each value of N is run 10 times. Solutions are not guaranteed to be unique, but they are generally not the easiest problems to solve. The following graph shows
+
+\begin{tikzpicture}
+\begin{axis}[width=500pt]
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=number] {data.csv};
+\addlegendentry{Number of Holes}
+\end{axis}
+\end{tikzpicture}
+
+\subsection{Specification}
+\begin{tikzpicture}
+\begin{axis}[width=500pt]
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=spec] {data.csv};
+\addlegendentry{Specification Runtime}
+\end{axis}
+\end{tikzpicture}
+
+\subsection{Direct}
+\begin{tikzpicture}
+\begin{axis}[width=500pt]
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=direct] {data.csv};
+\addlegendentry{Direct Runtime}
+\end{axis}
+\end{tikzpicture}
+
+\subsection{SAT First Method}
+\begin{tikzpicture}
+\begin{axis}[width=500pt]
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=mini1] {data.csv};
+\addlegendentry{MiniSat}
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=glu1] {data.csv};
+\addlegendentry{Glucose}
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=ling1] {data.csv};
+\addlegendentry{Lingeling}
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=clasp1] {data.csv};
+\addlegendentry{Clasp}
+\end{axis}
+\end{tikzpicture}
+
+\subsection{SAT Second Method}
+\begin{tikzpicture}
+\begin{axis}[width=400pt]
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=mini2] {data.csv};
+\addlegendentry{MiniSat}
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=glu2] {data.csv};
+\addlegendentry{Glucose}
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=ling2] {data.csv};
+\addlegendentry{Lingeling}
+\addplot+[mark=none] table [col sep=comma,trim cells=true,y=clasp2] {data.csv};
+\addlegendentry{Clasp}
+\end{axis}
+\end{tikzpicture}
 
 \end{document}
