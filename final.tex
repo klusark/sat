@@ -85,7 +85,7 @@ There are many SAT solvers out that that have been released as open source. Oddl
 
 \section{Results}
 \subsection{First Family}
-The first benchmark family has a simple architecture, but provides very interesting data through running the solvers many times. Simply it generates a 16x16 sudoku puzzle randomly with N holes. N starts at 1 and increases by 5 up to 251. Each value of N is run 10 times. Solutions are not guaranteed to be unique, but they are generally not the easiest problems to solve. The following graph shows
+The first benchmark family has a simple architecture, but provides very interesting data through running the solvers many times. Simply it generates a 16x16 sudoku puzzle randomly with N holes. N starts at 1 and increases by 5 up to 251. Each value of N is run 10 times. Solutions are not guaranteed to be unique, but they are generally not the easiest problems to solve. I set a timeout of 10 seconds The following graph shows
 
 \begin{tikzpicture}
 \begin{axis}[width=500pt]
@@ -94,25 +94,29 @@ The first benchmark family has a simple architecture, but provides very interest
 \end{axis}
 \end{tikzpicture}
 
-\subsection{Specification}
+\subsubsection{Specification}
 \begin{tikzpicture}
-\begin{axis}[width=500pt]
+\begin{axis}[width=550pt]
 \addplot+[mark=none] table [col sep=comma,trim cells=true,y=spec] {data.csv};
 \addlegendentry{Specification Runtime}
 \end{axis}
 \end{tikzpicture}
 
-\subsection{Direct}
+Overall the specification is fairly consistent in it's runtime. The more holes that are in the puzzle, the harder it is for it to find a solution. The odd thing about this data is that for very small inputs it still has a runtime of at least one second. This suggests some overhead somewhere in the system, but it is impossible for me to find where that is without access to the Enfragmo source code.
+
+\subsubsection{Direct}
 \begin{tikzpicture}
-\begin{axis}[width=500pt]
+\begin{axis}[width=550pt]
 \addplot+[mark=none] table [col sep=comma,trim cells=true,y=direct] {data.csv};
 \addlegendentry{Direct Runtime}
 \end{axis}
 \end{tikzpicture}
 
-\subsection{SAT First Method}
+The direct method provides runtime that could be reasonably expected from a random solver off the internet. When the problem is easy the direct solution provides a consistently fast answer, but once it starts getting just a little harder it quickly leads to timeouts and makes the direction solution completely impractical.
+
+\subsubsection{SAT First Method}
 \begin{tikzpicture}
-\begin{axis}[width=500pt]
+\begin{axis}[width=540pt]
 \addplot+[mark=none] table [col sep=comma,trim cells=true,y=mini1] {data.csv};
 \addlegendentry{MiniSat}
 \addplot+[mark=none] table [col sep=comma,trim cells=true,y=glu1] {data.csv};
@@ -124,9 +128,11 @@ The first benchmark family has a simple architecture, but provides very interest
 \end{axis}
 \end{tikzpicture}
 
-\subsection{SAT Second Method}
+This SAT method works very well on almost all of the solvers. Clasp, unfortunately does very poorly compared to the other SAT solvers as it seems to follow an exponential curve the more holes that are added. Lingeling has a fairly consistent time just a bit slower than MiniSat and Glucose. I would guess this slower speed is the result of a slower parser.
+
+\subsubsection{SAT Second Method}
 \begin{tikzpicture}
-\begin{axis}[width=400pt]
+\begin{axis}[width=540pt]
 \addplot+[mark=none] table [col sep=comma,trim cells=true,y=mini2] {data.csv};
 \addlegendentry{MiniSat}
 \addplot+[mark=none] table [col sep=comma,trim cells=true,y=glu2] {data.csv};
@@ -137,5 +143,7 @@ The first benchmark family has a simple architecture, but provides very interest
 \addlegendentry{Clasp}
 \end{axis}
 \end{tikzpicture}
+
+This SAT method is terrible compared to the first one. Surprisingly Lingeling actually does the worst with this method instead of Clasp, like in the last method. MiniSat and Glucose still do the best early on. The solvers actually get slow later than the Direct Solver did, meaning that it's better to use this worse SAT method than it is to use a badly made direct solver.
 
 \end{document}
