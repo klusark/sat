@@ -142,8 +142,28 @@ This SAT method works very well on almost all of the solvers. Clasp, unfortunate
 
 This SAT method is terrible compared to the first one. Surprisingly Lingeling actually does the worst with this method instead of Clasp, like in the last method. MiniSat and Glucose still do the best early on. The solvers actually get slow later than the Direct Solver did, meaning that it's better to use this worse SAT method than it is to use a badly made direct solver.
 
+\newpage
+
 \subsection{Second Family}
 
+The second family of benchmarks I am using are 5 simple sudoku boards. The first is simply an empty board. For a human, it is trivial to prove that this is solvable. The second is a board with just one number entered. This is very similar to the empty case, so results should be similar. The third one is a simple unsat test. It simply has two 1's on the same row. It should be trivial to show that this board is not satisfiable. The fourth is a slightly more complex unsat case. In this one the entire board is filled, but one number is removed. The number that has been removed gets moved somewhere else in the row instead. It is harder for a human to see this one as there are so many numbers, but should still be trivial. The last case is an already solved board which should also be trivial to show.
+
+\begin{table}[h]
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|}
+    \hline
+    ~      & Mini 1 & Mini 2 & Glu 1 & Glu 2 & Lini 1 & Ling 2 & Clasp 1 & Clasp 2 & Direct & Specification \\ \hline
+    Empty  & 0.05          & 10.00          & 0.05          & 10.00          & 0.08            & 10.00            & 0.47        & 10.00        & 1.92   & 1.83          \\ \hline
+    Single & 0.05          & 10.00          & 0.05          & 10.00          & 0.08            & 10.00            & 0.47        & 10.00        & 1.94   & 1.88          \\ \hline
+    Unsat1 & 0.04          & 0.07           & 0.04          & 0.07           & 0.07            & 0.17             & 0.06        & 0.09         & 0.00   & 1.24          \\ \hline
+    Unsat2 & 0.04          & 0.07           & 0.04          & 0.08           & 0.08            & 0.17             & 0.07        & 0.09         & 0.00   & 1.15          \\ \hline
+    Solved & 0.05          & 0.08           & 0.05          & 0.08           & 0.08            & 0.19             & 0.07        & 0.10         & 0.00   & 1.19          \\ \hline
+    \end{tabular}
+\end{table}
+
+The results here make sense for the most part. The only part that surprised me is how the second SAT method timed out in the almost empty cases. The direct and specification also took longer than I would have thought. The direct approach is the best one at determining an already solved board or a trivially unsat board.
+
 \section{Conclusions}
+
+Some methods of generating CNF formulas are better than others in almost every case and not all SAT solvers are created equally. Using SAT to solve problems is almost surely a good bet as long as one writes good CNF and uses a world renowned SAT solver.
 
 \end{document}
