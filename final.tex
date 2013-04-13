@@ -85,14 +85,7 @@ There are many SAT solvers out that that have been released as open source. Oddl
 
 \section{Results}
 \subsection{First Family}
-The first benchmark family has a simple architecture, but provides very interesting data through running the solvers many times. Simply it generates a 16x16 sudoku puzzle randomly with N holes. N starts at 1 and increases by 5 up to 251. Each value of N is run 10 times. Solutions are not guaranteed to be unique, but they are generally not the easiest problems to solve. I set a timeout of 10 seconds The following graph shows
-
-\begin{tikzpicture}
-\begin{axis}[width=500pt]
-\addplot+[mark=none] table [col sep=comma,trim cells=true,y=number] {data.csv};
-\addlegendentry{Number of Holes}
-\end{axis}
-\end{tikzpicture}
+The first benchmark family has a simple architecture, but provides very interesting data through running the solvers many times. Simply it generates a 16x16 sudoku puzzle randomly with N holes. N starts at 1 and increases by 5 up to 251. Each value of N is run 10 times. Solutions are not guaranteed to be unique, but they are generally not the easiest problems to solve. I set a timeout of 10 seconds as I thought that would be a reasonable limit.
 
 \subsubsection{Specification}
 \begin{tikzpicture}
@@ -145,5 +138,9 @@ This SAT method works very well on almost all of the solvers. Clasp, unfortunate
 \end{tikzpicture}
 
 This SAT method is terrible compared to the first one. Surprisingly Lingeling actually does the worst with this method instead of Clasp, like in the last method. MiniSat and Glucose still do the best early on. The solvers actually get slow later than the Direct Solver did, meaning that it's better to use this worse SAT method than it is to use a badly made direct solver.
+
+\subsection{Second Family}
+
+\section{Conclusions}
 
 \end{document}
