@@ -81,7 +81,10 @@ One family I use is randomly generated problems. There is a good generalized sud
 \subsection{Methods}
 Two methods of generating CNF formulas were generated for this problem. The first method is very simple. It uses 1 variable for each possible number on each square of the map. For a 16x16 sudoku this means it has a total of 4096 variables. The clauses for this one are for the most part very simple, consisting of only two variables each for most of the clauses. The second method is a lot more complicated. The idea for it came from the paper\footnote{http://www.cs.sfu.ca/~mitchell/cmpt-417/2013-Spring/Readings/2-Malik-Zhang-CACM-SAT-Review.pdf} we were provided on solving graph colouring using binary. I use only four variables for each square on the board which represent the number in binary. For example if we have variables $a = 1, b = 0, c = 1, d = 0$ the value of the square would be $5$. This method works very well for 16x16 as no bits are wasted, unlike for a 9x9 puzzle as you would still need 4 bits to represent it. This has a huge advantage in the number of variables used for the problem as each square only needs 4, unlike my first method where they need 16, meaning the total number of variables for a 16x16 is only 1024. But, this comes at a cost in the formula that is generated as the clauses now all use at least eight variables, making it a lot harder to eliminate clauses from the formula.
 \subsection{Solvers}
-There are many SAT solvers out that that have been released as open source. Oddly enough, a large number of them seem to be based on MiniSat. I chose four SAT solvers that have done generally very well in past SAT competitions, which were also easy to build on my machine.
+There are many SAT solvers out that that have been released as open source.
+Oddly enough, a large number of them seem to be based on MiniSat.
+I chose four SAT solvers that have done generally very well in past SAT competitions, which were also easy to build on my machine.
+These are Glucose\footnote{https://www.lri.fr/~simon/?page=glucose}, MiniSat\footnote{http://minisat.se/}, Lingeling\footnote{http://fmv.jku.at/lingeling/}, and Clasp\footnote{http://www.cs.uni-potsdam.de/clasp/}.
 
 \section{Results}
 \subsection{First Family}
